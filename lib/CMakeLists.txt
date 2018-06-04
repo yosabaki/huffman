@@ -15,6 +15,6 @@ add_executable(tests test.cpp
         gtest/gtest_main.cc
         gtest/gtest-all.cc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -fsanitizer=static,undefined")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -fsanitize=static,undefined")
 
 target_link_libraries(tests huff_lib)
