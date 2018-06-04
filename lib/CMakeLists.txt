@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 project(HUFFMAN_LIB)
+include(gtest.cmake)
 include_directories(${HUFFMAN_LIB_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 17)
 
