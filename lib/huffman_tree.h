@@ -7,42 +7,40 @@
 
 #include <vector>
 #include <bitset>
+#include <memory>
+
 #include "code_word.h"
 #include "frequency.h"
 
 class huffman_tree {
 public:
-    huffman_tree(frequency const &freq);
+    explicit huffman_tree(frequency const &freq);
 
     unsigned get_count() const;
-
-    ~huffman_tree();
 
 protected:
 
     std::vector<code_word> symbols;
 
     struct Node {
-        Node *l = nullptr, *r = nullptr;
+        size_t l, r, ind;
         unsigned char symbol;
         unsigned long long weight;
 
-        Node() = default;
+        Node() : l(0), r(0), ind(0), symbol(0), weight(UINT64_MAX) {}
 
-        Node(Node const &other) = default;
+        Node(unsigned long long w, unsigned char c, size_t i) : l(0), r(0), ind(i), symbol(c), weight(w) {}
 
-        Node(unsigned long long w, unsigned char c) : weight(w), symbol(c) {}
-
-        Node(unsigned long long w, Node *_l, Node *_r) : weight(w), l(_l), r(_r) {}
+        Node(unsigned long long w, size_t _l, size_t _r, size_t i) : l(_l), r(_r), ind(i), symbol(0), weight(w) {}
     };
-
-    void clear(Node *curr);
 
     unsigned count;
 
-    void set_symbols(Node *curr, code_word &curr_word);
+    void set_symbols(size_t curr, code_word &curr_word);
 
-    Node *root;
+    std::vector<Node> tree;
+
+    size_t root;
 };
 
 

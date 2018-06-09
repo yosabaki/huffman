@@ -10,25 +10,19 @@
 struct frequency {
     frequency();
 
-    frequency(std::vector<unsigned long long> const &f);
-
-    frequency(frequency const &other);
+    explicit frequency(std::vector<unsigned long long> const &f);
 
     void add_frequency(std::vector<unsigned char> const &stream);
-
-    frequency &operator=(frequency const &other);
-
-    ~frequency();
 
     unsigned int size() const;
 
     unsigned long long &operator[](size_t _n);
 
-    unsigned long long &operator[](size_t _n) const;
+    const unsigned long long &operator[](size_t _n) const;
 
 private:
-    unsigned long long *freq;
-    
+    std::vector<unsigned long long> freq;
+
     unsigned int _size;
 };
 

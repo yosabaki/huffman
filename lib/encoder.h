@@ -13,7 +13,7 @@ class encoder : public huffman_tree {
 public:
     void encode(std::vector<unsigned char> const &data, code &c_data) const;
 
-    encoder(frequency const &freq);
+    explicit encoder(frequency const &freq);
 };
 
 

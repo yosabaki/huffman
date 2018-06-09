@@ -15,10 +15,12 @@ public:
 
     std::vector<unsigned char> decode_stream(code const &data);
 
-    decoder(frequency const &freq);
+    void close_stream();
+
+    explicit decoder(frequency const &freq);
 
 private:
-    Node *scan;
+    size_t scan;
 
     unsigned char get_symbol(int &ind, int &pos, code const &data);
 };

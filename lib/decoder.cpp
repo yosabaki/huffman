@@ -5,8 +5,7 @@
 #include <stdexcept>
 #include "decoder.h"
 
-decoder::decoder(frequency const &freq) : huffman_tree(freq) {
-    scan = root;
+decoder::decoder(frequency const &freq) : huffman_tree(freq), scan(root) {
 }
 
 std::vector<unsigned char> decoder::decode(code const &data) {
@@ -15,9 +14,8 @@ std::vector<unsigned char> decoder::decode(code const &data) {
     while (ind * 8 + pos < data.size()) {
         dec_data.push_back(get_symbol(ind, pos, data));
     }
-    if (scan != root) {
+    if (scan != root)
         throw std::runtime_error("Unexpected symbols at the end of encoded data");
-    }
     return dec_data;
 }
 
@@ -32,17 +30,22 @@ std::vector<unsigned char> decoder::decode_stream(code const &data) {
     return dec_data;
 }
 
+void decoder::close_stream() {
+    if (scan != root)
+        throw std::runtime_error("Unexpected symbols at the end of encoded data");
+}
+
 unsigned char decoder::get_symbol(int &ind, int &pos, code const &data) {
     for (ind; ind * 8 + pos < data.size(); ind++) {
         for (pos; pos < 8; pos++) {
-            bool curr_bit = data[ind] & (1ull << pos);
-            scan = (curr_bit ? scan->l : scan->r);
-            if (scan == nullptr) {
+            auto curr_bit = static_cast<bool>(data[ind] & (1ull << pos));
+            scan = (curr_bit ? tree[scan].l : tree[scan].r);
+            if (scan == 0) {
                 throw (std::runtime_error("Invalid data."));
             }
-            if (scan->l == nullptr) {
+            if (tree[scan].l == 0) {
                 pos++;
-                unsigned char tmp = scan->symbol;
+                unsigned char tmp = tree[scan].symbol;
                 scan = root;
                 return tmp;
             }

@@ -57,7 +57,7 @@ frequency get_frequency(std::string const &file) {
 void compress(std::string const &src, std::string const &dst) {
     std::ifstream in(src, std::ofstream::binary);
     if (in.fail())
-        throw (std::runtime_error(src + " doesn't exist.\n"));
+        throw (std::runtime_error("Can't open " + src + "\n"));
     frequency f = get_frequency(src);
     encoder e(f);
     std::ofstream out(dst, std::ifstream::binary);
@@ -99,12 +99,12 @@ void decompress(std::string const &src, std::string const &dst) {
     unsigned long long h_d = 5381;
     std::ifstream in(src, std::ofstream::binary);
     if (in.fail())
-        throw (std::runtime_error(src + " doesn't exist.\n"));
+        throw (std::runtime_error("Can't open " + src + ".\n"));
     unsigned char c;
     unsigned long long freq;
     unsigned int n;
     read(n, in);
-    if (in.eof())
+    if (in.eof() || n > 256)
         throw (std::runtime_error("Invalid file type. Try to decompress another file.\n"));
     std::vector<unsigned long long> tmp(256, 0);
     char str_f[n * 5];
@@ -138,6 +138,7 @@ void decompress(std::string const &src, std::string const &dst) {
     }
     in.close();
     out.close();
+    d.close_stream();
     if (h_d != cmp_h_d)
         throw (std::runtime_error("Invalid decompressed data. " + dst + " can become unusable.\n"));
 }
