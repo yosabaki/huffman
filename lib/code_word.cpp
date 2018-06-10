@@ -15,5 +15,5 @@ void code_word::push_bit(bool b) {
 
 void code_word::pop_bit() {
     length--;
-    word &= (1 << length) - 1;
+    word &= (1ull << length) - 1;
 }
